@@ -608,6 +608,10 @@ func getDesiredJob(observed *ObservedClusterState) *batchv1.Job {
 		jobArgs = append(jobArgs, "--class", *jobSpec.ClassName)
 	}
 
+	for i := 0; i < len(jobSpec.Classpaths); i++ {
+		jobArgs = append(jobArgs, "--classpath", jobSpec.Classpaths[i])
+	}
+
 	var fromSavepoint = convertFromSavepoint(jobSpec, flinkCluster.Status.Components.Job)
 	if fromSavepoint != nil {
 		jobArgs = append(jobArgs, "--fromSavepoint", *fromSavepoint)

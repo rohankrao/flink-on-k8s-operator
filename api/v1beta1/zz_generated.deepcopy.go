@@ -596,6 +596,11 @@ func (in *JobSpec) DeepCopyInto(out *JobSpec) {
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}
+	if in.Classpaths != nil {
+		in, out := &in.Classpaths, &out.Classpaths
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	if in.FromSavepoint != nil {
 		in, out := &in.FromSavepoint, &out.FromSavepoint
 		*out = new(string)

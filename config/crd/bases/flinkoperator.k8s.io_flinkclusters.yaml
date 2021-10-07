@@ -179,6 +179,10 @@ spec:
                     type: boolean
                   className:
                     type: string
+                  classpaths:
+                    items:
+                      type: string
+                    type: array
                   cleanupPolicy:
                     properties:
                       afterJobCancelled:

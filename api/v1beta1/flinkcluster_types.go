@@ -370,6 +370,9 @@ type JobSpec struct {
 	// Args of the job.
 	Args []string `json:"args,omitempty"`
 
+	// Classpaths of the job.
+	Classpaths []string `json:"classpaths,omitempty"`
+
 	// FromSavepoint where to restore the job from (e.g., gs://my-savepoint/1234).
 	FromSavepoint *string `json:"fromSavepoint,omitempty"`
 
