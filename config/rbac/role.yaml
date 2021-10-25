@@ -125,6 +125,7 @@ rules:
       - ""
     resources:
       - pods/status
+      - pods/log
     verbs:
       - get
   - apiGroups:
@@ -146,7 +147,7 @@ rules:
     verbs:
       - get
   - apiGroups:
-      - extensions
+      - networking.k8s.io
     resources:
       - ingresses
     verbs:
@@ -158,7 +159,7 @@ rules:
       - update
       - watch
   - apiGroups:
-      - extensions
+      - networking.k8s.io
     resources:
       - ingresses/status
     verbs:
@@ -182,4 +183,12 @@ rules:
     verbs:
       - get
       - patch
+      - update
+  - apiGroups:
+      - scheduling.volcano.sh
+    resources:
+      - podgroups
+    verbs:
+      - get
+      - create
       - update
