@@ -23,8 +23,9 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
-	extensionsv1beta1 "k8s.io/api/extensions/v1beta1"
+	networkingv1 "k8s.io/api/networking/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
@@ -44,7 +45,7 @@ func init() {
 	batchv1.AddToScheme(scheme)
 	corev1.AddToScheme(scheme)
 	v1beta1.AddToScheme(scheme)
-	extensionsv1beta1.AddToScheme(scheme)
+	networkingv1.AddToScheme(scheme)
 	// +kubebuilder:scaffold:scheme
 }
 
@@ -84,9 +85,16 @@ func main() {
 		os.Exit(1)
 	}
 
+	cs, err := kubernetes.NewForConfig(mgr.GetConfig())
+	if err != nil {
+		setupLog.Error(err, "Unable to create clientset")
+		os.Exit(1)
+	}
+
 	err = (&controllers.FlinkClusterReconciler{
-		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("FlinkCluster"),
+		Client:    mgr.GetClient(),
+		Clientset: cs,
+		Log:       ctrl.Log.WithName("controllers").WithName("FlinkCluster"),
 	}).SetupWithManager(mgr)
 	if err != nil {
 		setupLog.Error(err, "Unable to create controller", "controller", "FlinkCluster")
@@ -96,8 +104,7 @@ func main() {
 	// Set up webhooks for the custom resource.
 	// Disable it with `FLINK_OPERATOR_ENABLE_WEBHOOKS=false` when we run locally.
 	if os.Getenv("FLINK_OPERATOR_ENABLE_WEBHOOKS") != "false" {
-		err = (&v1beta1.FlinkCluster{}).SetupWebhookWithManager(mgr)
-		if err != nil {
+		if err = (&v1beta1.FlinkCluster{}).SetupWebhookWithManager(mgr); err != nil {
 			setupLog.Error(err, "Unable to setup webhooks", "webhook", "FlinkCluster")
 			os.Exit(1)
 		}
