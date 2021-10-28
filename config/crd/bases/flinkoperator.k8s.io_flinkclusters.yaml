@@ -146,6 +146,17 @@ spec:
                     mountPath:
                       type: string
                   type: object
+                hostAlias:
+                  items:
+                    properties:
+                      hostnames:
+                        items:
+                          type: string
+                        type: array
+                      ip:
+                        type: string
+                    type: object
+                  type: array
                 image:
                   properties:
                     name:
@@ -177,6 +188,10 @@ spec:
                       type: boolean
                     className:
                       type: string
+                    classpaths:
+                      items:
+                        type: string
+                      type: array
                     cleanupPolicy:
                       properties:
                         afterJobCancelled:

@@ -180,6 +180,7 @@ func getDesiredJobManagerStatefulSet(
 		SecurityContext:               securityContext,
 		ServiceAccountName:            getServiceAccountName(serviceAccount),
 		TerminationGracePeriodSeconds: &terminationGracePeriodSeconds,
+		HostAliases:                   clusterSpec.HostAliases,
 	}
 
 	var jobManagerStatefulSet = &appsv1.StatefulSet{
@@ -473,6 +474,7 @@ func getDesiredTaskManagerStatefulSet(
 		SecurityContext:               securityContext,
 		ServiceAccountName:            getServiceAccountName(serviceAccount),
 		TerminationGracePeriodSeconds: &terminationGracePeriodSeconds,
+		HostAliases:                   clusterSpec.HostAliases,
 	}
 
 	var taskManagerStatefulSet = &appsv1.StatefulSet{
@@ -723,6 +725,7 @@ func getDesiredJob(observed *ObservedClusterState) *batchv1.Job {
 		ImagePullSecrets:   imageSpec.PullSecrets,
 		SecurityContext:    securityContext,
 		ServiceAccountName: getServiceAccountName(serviceAccount),
+		HostAliases:        clusterSpec.HostAliases,
 	}
 
 	// Disable the retry mechanism of k8s Job, all retries should be initiated

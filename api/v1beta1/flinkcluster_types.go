@@ -466,6 +466,9 @@ type FlinkClusterSpec struct {
 	// The version of Flink to be managed. This version must match the version in the image.
 	FlinkVersion string `json:"flinkVersion"`
 
+	// HostAliases of the job.
+	HostAliases []corev1.HostAlias `json:"hostAlias,omitempty"`
+
 	// Flink image spec for the cluster's components.
 	Image ImageSpec `json:"image"`
 
